@@ -1,9 +1,16 @@
 import React from 'react'
-import MagicBento from '../../ui/magicbento.jsx'
-import TechProjectsBento from '../../ui/techproject.jsx'
+import MagicBento from '../../ui/animations/magicbento.jsx'
+import TechProjectsBento from '../../ui/animations/techproject.jsx'
 import Navbar from '../../ui/nav2bar.jsx';
+import MovingParticleBackground from '../../ui/animations/movingparticalbg.jsx';
+
 const project = () => {
   return (
+     <div style={{ minHeight: '100vh', position: 'relative' }}>
+            <MovingParticleBackground
+                particleCount={50}
+                glowColor={'200, 200, 200'}
+            />
     <div className="overflow-x-hidden containerz">
       <Navbar />
   <div className="text-white containerz mb-1">
@@ -27,6 +34,12 @@ const project = () => {
             <TechProjectsBento />
             <div className='h-20'></div>
 
+</div>
+   <div className="absolute bottom-8 left-8">
+                <div className="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center cursor-pointer">
+                    <span className="text-pink-500 text-xl">🦄</span>
+                </div>
+            </div>
 </div>
   )
 }

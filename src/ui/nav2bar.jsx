@@ -49,7 +49,7 @@ const nav2bar = () => {
   return (
     <>
       <div className=" ">
-        <nav className="flex items-center justify-between bg-[#131315] flex-wrap p-7  text-white align-center">
+        <nav className="flex items-center justify-between  flex-wrap p-7  text-white align-center">
           <a
             href="http://localhost:3000"
             className="items-center text-lg pl-5 "
@@ -87,9 +87,9 @@ const nav2bar = () => {
               </Dropdown>
             </div>
 
-            <button className="bg-black text-white px-9 py-2 rounded-sm">
-              hello@asad.fr
-            </button>
+             <button className="border border-gray-600 text-white px-6 py-2 rounded-sm hover:bg-white/10 transition-colors">
+                        hello@asad.fr
+                    </button>
           </li>
         </nav>
       </div>

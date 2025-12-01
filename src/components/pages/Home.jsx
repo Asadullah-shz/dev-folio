@@ -1,14 +1,13 @@
-import Navbar from '../../ui/navbar.jsx'
-import Section from '../../ui/section.jsx'
+import MovingParticleBackground from '../../ui/animations/movingparticalbg.jsx';
+import HeroPage from '../../ui/hero.jsx';
 
-
-const Home = () => {
-    return (
-        <div>
-            <Navbar />
-            <Section />
-        </div>
-    )
+function Home() {
+  return (
+    <>
+      <MovingParticleBackground /> 
+      <HeroPage />
+    </>
+  );
 }
 
-export default Home
+export default Home;

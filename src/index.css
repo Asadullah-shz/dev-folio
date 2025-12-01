@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Pacifico&family=Playwrite+DE+LA:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -11,66 +12,107 @@
   font-weight: 800;
   font-style: normal;
 }
+
 .pacifico-regular {
   font-family: "Pacifico", cursive;
   font-weight: 600;
   font-style: normal;
 }
 
-.head:default{
-   color: rgb(7, 2, 2);
-   text-stroke: 0.5px black;
-}
-.para:hover{
-   color: rgb(7, 2, 2);
-   text-stroke: 1px rgb(0, 0, 0);
+.head:default {
+  color: rgb(7, 2, 2);
+  text-stroke: 0.5px black;
 }
 
- @keyframes slideInRight {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+.para:hover {
+  color: rgb(7, 2, 2);
+  text-stroke: 1px rgb(0, 0, 0);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
 
-  @keyframes slideInLeft {
-    from {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
   }
 
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
   }
 
-  .hover\:animate-shake:hover {
-    animation: shake 0.5s ease-in-out;
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
   }
- @keyframes slideInRight {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
 
-        @keyframes slideInLeft {
-          from { transform: translateX(-100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
 
-        @keyframes fillText {
-          from { -webkit-text-fill-color: transparent; }
-          to { -webkit-text-fill-color: #212121 }
-        }
+.hover\:animate-shake:hover {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fillText {
+  from {
+    -webkit-text-fill-color: transparent;
+  }
+
+  to {
+    -webkit-text-fill-color: #212121
+  }
+}
 
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Pacifico&family=Playwrite+DE+LA:wght@100..400&display=swap');
 @import "tailwindcss";
@@ -85,118 +127,131 @@
   font-weight: 800;
   font-style: normal;
 }
+
 .pacifico-regular {
   font-family: "Pacifico", cursive;
   font-weight: 600;
   font-style: normal;
 }
 
-.head:default{
-   color: rgb(7, 2, 2);
-   text-stroke: 0.5px black;
-}
-.para:hover{
-   color: rgb(7, 2, 2);
-   text-stroke: 1px rgb(0, 0, 0);
+.head:default {
+  color: rgb(7, 2, 2);
+  text-stroke: 0.5px black;
 }
 
- @keyframes slideInRight {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+.para:hover {
+  color: rgb(7, 2, 2);
+  text-stroke: 1px rgb(0, 0, 0);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
 
-  @keyframes slideInLeft {
-    from {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
   }
 
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
   }
 
-  .hover\:animate-shake:hover {
-    animation: shake 0.5s ease-in-out;
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
   }
- @keyframes slideInRight {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
 
-        @keyframes slideInLeft {
-          from { transform: translateX(-100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
 
-        @keyframes fillText {
-          from { -webkit-text-fill-color: transparent; }
-          to { -webkit-text-fill-color: #212121 }
-        }
+.hover\:animate-shake:hover {
+  animation: shake 0.5s ease-in-out;
+}
 
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(2px); }
-          20%, 40%, 60%, 80% { transform: translateX(2px); }
-        }
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 
-        .heading {
-          -webkit-text-stroke: 2px black;
-          -webkit-text-fill-color: transparent;
-        }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
-        .heading:hover {
-          animation: shake 0.5s ease-in-out;
-        }
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
 
-        .slide-right {
-          animation: slideInRight 1s ease-out;
-        }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
-        .slide-left {
-          animation: slideInLeft 1s ease-out;
-        }
+@keyframes fillText {
+  from {
+    -webkit-text-fill-color: transparent;
+  }
 
-        /* .web-developer.filled {
-          animation: fillText 1.5s ease-out 0.5s forwards;
-        } */
+  to {
+    -webkit-text-fill-color: #212121
+  }
+}
 
-        .web-developer.filled .web-part {
-          animation: fillText 1.5s ease-out 0.5s forwards;
-        }
+@keyframes shake {
 
-        .web-developer.filled .eloper-part {
-          animation: fillText 1.5s ease-out 0.5s forwards;
-        }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
 
-        .web-developer.transparent .web-part {
-          -webkit-text-fill-color: transparent;
-          transition: -webkit-text-fill-color 0.4s ease;
-        }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(2px);
+  }
 
-        .web-developer.transparent .eloper-part {
-          -webkit-text-fill-color: transparent;
-          transition: -webkit-text-fill-color 0.4s ease;
-        }
-
-        .dev-part {
-          -webkit-text-fill-color: transparent !important;
-        }
-
-        .containerz{
-          background-color: #131315;
-          width: 100%;
-          height: 100%;
-        }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(2px);
+  }
+}
+.containerz {
+  width: 100%;
+  height: 100%;
+}
