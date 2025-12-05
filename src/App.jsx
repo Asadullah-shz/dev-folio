@@ -1,9 +1,12 @@
-import { Home, Projects, Contact, Experience, About, NotFound } from './components/imports.js';
+import { lazy, Suspense } from 'react';
 import { MoveLeft } from 'lucide-react';
 import Preloader from './ui/animations/mainloader.jsx';
 import { TransitionProvider, useTransition } from './context/TransitionContext.jsx';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Divider, Dropdown, Space, theme } from "antd";
+import { Home, Projects, Contact, Experience, About, NotFound } from './components/imports.js';
+
+
 
 const { useToken } = theme;
 
@@ -36,6 +39,14 @@ const items = [
     },
 ];
 
+// Loading fallback component
+const PageLoader = () => (
+    <div className="flex items-center justify-center min-h-screen bg-[#0f0f10ff]">
+        <div className="p-3 animate-spin drop-shadow-2xl bg-gradient-to-bl from-pink-400 via-purple-400 to-indigo-600 w-16 h-16 aspect-square rounded-full">
+            <div className="rounded-full h-full w-full bg-slate-100 dark:bg-zinc-900" />
+        </div>
+    </div>
+);
 
 const TransitionLink = ({ to, children, className }) => {
     const { navigateWithTransition } = useTransition();
@@ -56,29 +67,21 @@ const TransitionLink = ({ to, children, className }) => {
 
 const AppContent = () => {
     const { token } = useToken();
-    const contentStyle = {
-        backgroundColor: token.colorBgElevated,
-        borderRadius: token.borderRadiusLG,
-        boxShadow: token.boxShadowSecondary,
-    };
-    const menuStyle = {
-        boxShadow: "none",
-    };
 
     return (
         <div className=''>
             <Preloader />
             <div className="overflow-x-hidden containerz">
-                <nav className="flex items-center justify-between  flex-wrap p-7  text-white align-center">
+                <nav className="flex items-center justify-between flex-wrap p-7 text-white align-center">
                     <TransitionLink
                         to="/"
-                        className="items-center text-lg pl-5 "
+                        className="items-center text-lg pl-5"
                     >
-                        <h2 className="font-audiowide text-4xl pl-5 ">   <MoveLeft /></h2>
+                        <h2 className="font-audiowide text-4xl pl-5"><MoveLeft /></h2>
                     </TransitionLink>
-                    <li className="flex space-x-8  items-center text-neutral-500 font-medium">
+                    <li className="flex space-x-8 items-center text-neutral-500 font-medium">
                         <ul>
-                            <TransitionLink to="">Home</TransitionLink>
+                            <TransitionLink to="/">Home</TransitionLink>
                         </ul>
                         <ul>
                             <TransitionLink to="/about">About</TransitionLink>
@@ -93,16 +96,7 @@ const AppContent = () => {
                             <TransitionLink to="/contact">Contact</TransitionLink>
                         </ul>
                         <div className="pl-9">
-                            <Dropdown
-                                className=""
-                            // menu={{ items }}
-                            // popupRender={(menu) => (
-                            //     <div style={contentStyle}>
-                            //         {React.cloneElement(menu, { style: menuStyle })}
-                            //         <Divider style={{ margin: 0 }} />
-                            //     </div>
-                            // )}
-                            >
+                            <Dropdown>
                                 <a onClick={(e) => e.preventDefault()}>
                                     <Space className="hover:underline cursor-pointer">EN</Space>
                                 </a>
@@ -115,15 +109,16 @@ const AppContent = () => {
                     </li>
                 </nav>
 
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/projects" element={<Projects />} />
-                    <Route path="/experience" element={<Experience />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-
+                <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/projects" element={<Projects />} />
+                        <Route path="/experience" element={<Experience />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </Suspense>
             </div>
         </div>
     );

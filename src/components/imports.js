@@ -1,15 +1,19 @@
-import Home from './pages/Home.jsx';
-import Projects from './pages/project.jsx';
-import Contact from './pages/contact.jsx';
-import Experience from './pages/experience.jsx';
-import About from './pages/about.jsx';
-import NotFound from './pages/404.jsx';
+import { lazy, Suspense } from 'react';
+
+const Home = lazy(() => import('./pages/Home.jsx'));
+const Projects = lazy(() => import('./pages/project.jsx'));
+const Contact = lazy(() => import('./pages/contact.jsx'));
+const Experience = lazy(() => import('./pages/experience.jsx'));
+const About = lazy(() => import('./pages/about.jsx'));
+const NotFound = lazy(() => import('./pages/404.jsx'));
 
 
 
-export { Home, 
+export {
+    Home,
     Projects,
-     Contact, 
-     Experience,
-      About,
-       NotFound};
+    Contact,
+    Experience,
+    About,
+    NotFound
+};

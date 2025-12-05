@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { gsap } from 'gsap';
 
 const DEFAULT_PARTICLE_COUNT = 40;
@@ -9,41 +9,73 @@ const createParticleElement = (x, y, color) => {
     const el = document.createElement('div');
     el.className = 'bg-particle';
     el.style.cssText = `
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: rgba(${color}, 1);
-    box-shadow: 0 0 8px rgba(${color}, 0.8);
-    pointer-events: none;
-    z-index: 0;
-    left: ${x}px;
-    top: ${y}px;
-  `;
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: rgba(${color}, 1);
+        box-shadow: 0 0 8px rgba(${color}, 0.8);
+        pointer-events: none;
+        z-index: 0;
+        left: ${x}px;
+        top: ${y}px;
+        will-change: transform, opacity;
+    `;
     return el;
 };
 
 const useMobileDetection = () => {
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(() => 
+        typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT
+    );
+
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
-        checkMobile();
+        let timeoutId;
+        const checkMobile = () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+            }, 150);
+        };
+
         window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
+        return () => {
+            window.removeEventListener('resize', checkMobile);
+            clearTimeout(timeoutId);
+        };
     }, []);
+
     return isMobile;
 };
 
-const MovingParticleBackground = ({
+const MovingParticleBackground = memo(({
     particleCount = DEFAULT_PARTICLE_COUNT,
     glowColor = DEFAULT_GLOW_COLOR,
 }) => {
     const containerRef = useRef(null);
     const particlesRef = useRef([]);
     const timeoutsRef = useRef([]);
+    const animationsRef = useRef([]);
     const isMobile = useMobileDetection();
 
     const disableAnimations = isMobile;
+
+    const cleanupParticles = useCallback(() => {
+        animationsRef.current.forEach(anim => {
+            if (anim && anim.kill) anim.kill();
+        });
+        animationsRef.current = [];
+
+        timeoutsRef.current.forEach(clearTimeout);
+        timeoutsRef.current = [];
+
+        particlesRef.current.forEach(particle => {
+            if (particle.parentNode) {
+                particle.parentNode.removeChild(particle);
+            }
+        });
+        particlesRef.current = [];
+    }, []);
 
     const initializeAndAnimateParticles = useCallback(() => {
         if (disableAnimations || !containerRef.current) return;
@@ -53,7 +85,10 @@ const MovingParticleBackground = ({
 
         if (width === 0 || height === 0) return;
 
-        const spawnAndAnimateParticle = () => {
+        
+        const effectiveCount = width < 768 ? Math.floor(particleCount * 0.5) : particleCount;
+
+        const spawnAndAnimateParticle = (index) => {
             const startX = Math.random() * width;
             const startY = Math.random() * height;
 
@@ -61,48 +96,47 @@ const MovingParticleBackground = ({
             container.appendChild(particle);
             particlesRef.current.push(particle);
 
-            gsap.fromTo(particle, { scale: 0, opacity: 0 }, {
-                scale: 1,
-                opacity: 1,
-                duration: 0.5,
-                ease: 'back.out(1.7)'
-            });
+      
+            const scaleAnim = gsap.fromTo(particle, 
+                { scale: 0, opacity: 0 }, 
+                {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)'
+                }
+            );
+            animationsRef.current.push(scaleAnim);
 
-            gsap.to(particle, {
-                x: (Math.random() - 0.5) * width * 0.5,
-                y: (Math.random() - 0.5) * height * 0.5,
-                duration: 6 + Math.random() * 4,
+            const moveAnim = gsap.to(particle, {
+                x: (Math.random() - 0.5) * width * 0.3,
+                y: (Math.random() - 0.5) * height * 0.3,
+                duration: 8 + Math.random() * 4,
                 ease: 'sine.inOut',
                 repeat: -1,
                 yoyo: true
             });
+            animationsRef.current.push(moveAnim);
 
-            gsap.to(particle, {
+            
+            const opacityAnim = gsap.to(particle, {
                 opacity: 0.3 + Math.random() * 0.5,
-                duration: 3 + Math.random() * 2,
+                duration: 4 + Math.random() * 2,
                 ease: 'power2.inOut',
                 repeat: -1,
                 yoyo: true
             });
+            animationsRef.current.push(opacityAnim);
         };
 
-        for (let i = 0; i < particleCount; i++) {
+        
+        for (let i = 0; i < effectiveCount; i++) {
             const timeoutId = setTimeout(() => {
-                spawnAndAnimateParticle();
-            }, i * (1000 / particleCount));
+                spawnAndAnimateParticle(i);
+            }, i * (1000 / effectiveCount));
             timeoutsRef.current.push(timeoutId);
         }
     }, [disableAnimations, particleCount, glowColor]);
-
-    const cleanupParticles = useCallback(() => {
-        gsap.killTweensOf(particlesRef.current);
-        timeoutsRef.current.forEach(clearTimeout);
-        particlesRef.current.forEach(particle => {
-            particle.parentNode?.removeChild(particle);
-        });
-        particlesRef.current = [];
-        timeoutsRef.current = [];
-    }, []);
 
     useEffect(() => {
         if (disableAnimations) {
@@ -110,9 +144,20 @@ const MovingParticleBackground = ({
             return;
         }
 
-        initializeAndAnimateParticles();
+      
+        const idleCallback = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+        const handle = idleCallback(() => {
+            initializeAndAnimateParticles();
+        });
 
-        return cleanupParticles;
+        return () => {
+            if (window.cancelIdleCallback) {
+                window.cancelIdleCallback(handle);
+            } else {
+                clearTimeout(handle);
+            }
+            cleanupParticles();
+        };
     }, [initializeAndAnimateParticles, cleanupParticles, disableAnimations]);
 
     return (
@@ -145,6 +190,8 @@ const MovingParticleBackground = ({
             )}
         </div>
     );
-};
+});
+
+MovingParticleBackground.displayName = 'MovingParticleBackground';
 
 export default MovingParticleBackground;
