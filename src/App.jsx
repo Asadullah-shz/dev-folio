@@ -1,5 +1,5 @@
-import { MoveLeft } from 'lucide-react';
-import { Suspense } from 'react';
+import { MoveLeft, Menu, X } from 'lucide-react';
+import { Suspense, useState } from 'react';
 import Preloader from './ui/animations/mainloader.jsx';
 import { TransitionProvider, useTransition } from './context/TransitionContext.jsx';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -68,35 +68,33 @@ const TransitionLink = ({ to, children, className }) => {
 const AppContent = () => {
     const { token } = useToken();
 
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+    const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
     return (
         <div className=''>
             <Preloader />
             <div className="overflow-x-hidden containerz">
-                <nav className="flex items-center justify-between flex-wrap p-7 text-white align-center">
+                <nav className="flex items-center justify-between flex-wrap p-7 text-white align-center relative z-40">
                     <TransitionLink
                         to="/"
-                        className="items-center text-lg pl-5"
+                        className="items-center text-lg pl-5 z-50"
                     >
                         <h2 className="font-audiowide text-4xl pl-5"><MoveLeft /></h2>
                     </TransitionLink>
-                    <li className="flex space-x-8 items-center text-neutral-500 font-medium">
-                        <ul>
-                            <TransitionLink to="/">Home</TransitionLink>
-                        </ul>
-                        <ul>
-                            <TransitionLink to="/about">About</TransitionLink>
-                        </ul>
-                        <ul>
-                            <TransitionLink to="/projects">Projects</TransitionLink>
-                        </ul>
-                        <ul>
-                            <TransitionLink to="/experience">Experience</TransitionLink>
-                        </ul>
-                        <ul>
-                            <TransitionLink to="/contact">Contact</TransitionLink>
-                        </ul>
+
+
+                    <div className="hidden lg:flex space-x-8 items-center text-neutral-500 font-medium">
+                        <TransitionLink to="/">Home</TransitionLink>
+                        <TransitionLink to="/about">About</TransitionLink>
+                        <TransitionLink to="/projects">Projects</TransitionLink>
+                        <TransitionLink to="/experience">Experience</TransitionLink>
+                        <TransitionLink to="/contact">Contact</TransitionLink>
+
                         <div className="pl-9">
-                            <Dropdown>
+                            <Dropdown menu={{ items }}>
                                 <a onClick={(e) => e.preventDefault()}>
                                     <Space className="hover:underline cursor-pointer">EN</Space>
                                 </a>
@@ -106,7 +104,31 @@ const AppContent = () => {
                         <button className="border border-gray-600 text-white px-6 py-2 rounded-sm hover:bg-white/10 transition-colors">
                             <a href="mailto:asadshzdev@gmail.com">Hello@asad</a>
                         </button>
-                    </li>
+                    </div>
+
+
+                    <div className="lg:hidden flex items-center z-50">
+                        <button onClick={toggleMobileMenu} className="text-white p-2">
+                            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                        </button>
+                    </div>
+
+
+                    {isMobileMenuOpen && (
+                        <div className="fixed inset-0 bg-[#0f0f10] z-40 flex flex-col items-center justify-center space-y-8 text-2xl text-neutral-400 font-medium lg:hidden">
+                            <TransitionLink to="/" className="hover:text-white" onClick={() => { closeMobileMenu(); }}>Home</TransitionLink>
+                            <TransitionLink to="/about" className="hover:text-white" onClick={() => { closeMobileMenu(); }}>About</TransitionLink>
+                            <TransitionLink to="/projects" className="hover:text-white" onClick={() => { closeMobileMenu(); }}>Projects</TransitionLink>
+                            <TransitionLink to="/experience" className="hover:text-white" onClick={() => { closeMobileMenu(); }}>Experience</TransitionLink>
+                            <TransitionLink to="/contact" className="hover:text-white" onClick={() => { closeMobileMenu(); }}>Contact</TransitionLink>
+
+                            <div className="pt-8">
+                                <button className="border border-gray-600 text-white px-8 py-3 rounded-sm hover:bg-white/10 transition-colors">
+                                    <a href="mailto:asadshzdev@gmail.com">Hello@asad</a>
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </nav>
 
                 <Suspense fallback={<PageLoader />}>
@@ -119,7 +141,7 @@ const AppContent = () => {
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </Suspense>
-                
+
             </div>
         </div>
     );
